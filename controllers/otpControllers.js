@@ -15,16 +15,17 @@ const sendOtp = async (req, res) => {
     }
 
     const otpCode = generateOtp();
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // expires in 5 mins
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
 
-    await Otp.findOneAndUpdate(
+    // Save or update OTP in MongoDB
+    const savedOtp = await Otp.findOneAndUpdate(
       { phoneNumber },
       { otp: otpCode, expiresAt },
-      { upsert: true, new: true }
+      { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    // 📦 Replace this with real SMS in production
     console.log(`📲 OTP for ${phoneNumber} is: ${otpCode}`);
+    console.log("📦 OTP saved in MongoDB:", savedOtp);
 
     res.status(200).json({ message: "OTP sent successfully (mock)" });
   } catch (err) {
@@ -48,7 +49,6 @@ const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: "OTP expired" });
     }
 
-    // ✅ Update user verification
     const user = await User.findOneAndUpdate(
       { phoneNumber },
       { isVerified: true },
@@ -61,7 +61,6 @@ const verifyOtp = async (req, res) => {
 
     await Otp.deleteOne({ phoneNumber });
 
-    // 🔐 Create JWT token
     const token = generateToken(user._id);
 
     res.status(200).json({
