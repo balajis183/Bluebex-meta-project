@@ -15,6 +15,10 @@ const otpSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    name: {
+      type: String,
+      default: null, // optional, used only in register mode
+    },
   },
   {
     timestamps: true, // adds createdAt and updatedAt

@@ -1,29 +1,31 @@
 const User = require("../models/userSchema");
+const Otp = require("../models/otpSchema");
 
-// Register a new user (first-time phone number entry + name)
+
+// controllers/userController.js
 const registerUser = async (req, res) => {
   try {
     const { phoneNumber, name } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ phoneNumber });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const newUser = new User({ phoneNumber, name });
-    await newUser.save();
+    // Store name temporarily in OTP collection for registration
+    const otpData = await Otp.findOneAndUpdate(
+      { phoneNumber },
+      { name }, // Store name for user creation later
+      { upsert: true, new: true }
+    );
 
-    res
-      .status(201)
-      .json({ message: "User registered successfully", user: newUser });
+    res.status(200).json({ message: "OTP sent for registration (mock)" });
   } catch (error) {
-    console.error("Error in registerUser:", error.message);
+    console.error("Register error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// Login (OTP request only, name not required again)
 const loginUser = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
@@ -35,12 +37,14 @@ const loginUser = async (req, res) => {
         .json({ message: "User not found. Please register first." });
     }
 
-    res.status(200).json({ message: "OTP sent successfully", user });
+    // Just respond with success message, actual OTP sent in `sendOtp`
+    res.status(200).json({ message: "OTP sent for login (mock)" });
   } catch (error) {
-    console.error("Error in loginUser:", error.message);
+    console.error("Login error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 module.exports = {
   registerUser,
