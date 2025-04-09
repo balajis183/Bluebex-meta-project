@@ -20,6 +20,14 @@ const connect = async () => {
       console.error("❌ MongoDB connection error:", err.message);
     }
   };
+
+
+  const otpRoutes = require("./routes/otpRoutes");
+  const userRoutes = require("./routes/userRoutes");
+
+app.use("/api/otp", otpRoutes);
+app.use("/api/users", userRoutes);
+
   
 
 // Root Route
