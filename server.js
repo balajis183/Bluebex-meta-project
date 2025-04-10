@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 80;
 
 // Middleware
 app.use(cors());
@@ -37,6 +37,6 @@ app.get("/", (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is listening on http://localhost:${PORT}`);
+  console.log(`🚀 Server is listening on http://15.206.226.196`);
   connect();  //connection to datbase
 });
