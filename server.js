@@ -68,9 +68,9 @@ app.get("/", (req, res) => {
           <li><strong>POST</strong> /register</li>
           <li><strong>GET</strong> /get-all-users</li>
         </ul>
-        <p><strong>🌐 Domain:</strong> <a href="http://bluebex.xyz">http://bluebex.xyz</a></p>
+        <p><strong>🌐  Base Domain:</strong> <a href="https://www.bluebex.xyz">https://www.bluebex.xyz</a></p>
         <p><strong>🔗 Public IP:</strong> Also accessible via server IP <a href="http://15.206.226.196">http://15.206.226.196</a></p>
-        <p><strong>🔐 Secure Access:</strong> Use <a href="https://bluebex.xyz">https://bluebex.xyz</a> for HTTPS access</p>
+        <p><strong>🔐 Secure Access with SSL certificate: </strong> Use <a href="https://www.bluebex.xyz">https:www.//bluebex.xyz</a> for HTTPS access</p>
         <p><strong>🗄️ MongoDB:</strong> ✅ Connected successfully</p>
         <p><strong>⚙️ API Status:</strong> ✅ API is working well</p>
       </div>
