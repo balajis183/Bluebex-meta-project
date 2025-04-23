@@ -10,7 +10,7 @@ const HASH_KEY = process.env.HASH_KEY;
 //  Registration Flow
 const registerUser = async (req, res) => {
   try {
-    const { phoneNumber, name } = req.body;
+    const { phoneNumber, name , companyName, firebaseToken, appVersion  } = req.body;
 
     const existingUser = await User.findOne({ phoneNumber });
     if (existingUser) {
@@ -31,11 +31,14 @@ const registerUser = async (req, res) => {
         otp: otpResult.otp,
         expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 mins
         name,
+        companyName,
+        firebaseToken,
+        appVersion
       },
       { upsert: true, new: true }
     );
 
-    res.status(200).json({ message: "OTP sent successfully for registration" });
+    res.status(200).json({ message: "OTP sent successfully for registration", phoneNumber, status:"success", details: otpResult.details,});
   } catch (error) {
     console.error("Register error:", error.message);
     res.status(500).json({ message: "Server error" });
@@ -68,7 +71,7 @@ const loginUser = async (req, res) => {
       { upsert: true, new: true }
     );
 
-    res.status(200).json({ message: "OTP sent successfully for login" });
+    res.status(200).json({ message: "OTP sent successfully for login" ,phoneNumber,name:user.name, status:"success", details: otpResult.details,});
   } catch (error) {
     console.error("Login error:", error.message);
     res.status(500).json({ message: "Server error" });

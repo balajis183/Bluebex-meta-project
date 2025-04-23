@@ -19,6 +19,20 @@ const otpSchema = new mongoose.Schema(
       type: String,
       default: null, 
     },
+    companyName: {
+      type: String,
+      trim: true,
+    },
+    firebaseToken: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    appVersion: {
+      type: String,
+      trim: true,
+      default: null,
+    },  
   },
   {
     timestamps: true, // adds createdAt and updatedAt

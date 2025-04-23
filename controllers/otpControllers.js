@@ -26,13 +26,23 @@ const verifyOtp = async (req, res) => {
       const newUser = new User({
         phoneNumber,
         name: otpRecord.name || "User",
+        companyName: otpRecord.companyName || "Unknown Company or Role is User",
+        firebaseToken: otpRecord.firebaseToken || "",
+        appVersion: otpRecord.appVersion || "",
         isVerified: true,
       });
 
       await newUser.save();
       await Otp.deleteOne({ phoneNumber });
 
-      return res.status(201).json({ message: "User registered successfully" });
+      return res
+        .status(201)
+        .json({
+          message: "User registered successfully",
+          name: newUser.name,
+          phoneNumber: newUser.phoneNumber,
+          companyName: newUser.companyName,
+        });
     }
 
     if (mode === "login") {
@@ -43,7 +53,7 @@ const verifyOtp = async (req, res) => {
       );
 
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found"});
       }
 
       await Otp.deleteOne({ phoneNumber });
