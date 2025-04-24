@@ -78,6 +78,41 @@ const loginUser = async (req, res) => {
   }
 };
 
+//Adding the user by admin
+const addUser = async (req, res) => {
+  const { name, phoneNumber,companyName} = req.body;
+
+  // Ensure name and phoneNumber are provided
+  if (!name || !phoneNumber) {
+    return res.status(400).json({ message: "Name and phone number are required" });
+  }
+
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ phoneNumber });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Create new user with default role as 'user'
+    const newUser = new User({
+      name,
+      phoneNumber,
+      role: 'user',  // Default role for new users
+      companyName: companyName || "CompanyName not required for users",
+    });
+
+    // Save new user to the database
+    await newUser.save();
+
+    // Respond with success
+    res.status(201).json({ message: "User added successfully", newUser });
+  } catch (error) {
+    console.error("Error adding user:", error.message);
+    res.status(500).json({ message: "Server error" , error : error.message });
+  }
+};
+
 
 
 // Get All Users
@@ -95,5 +130,6 @@ const getAllUsers = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
-  getAllUsers
+  getAllUsers,
+  addUser
 };

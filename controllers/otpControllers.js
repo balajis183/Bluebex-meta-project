@@ -58,7 +58,8 @@ const verifyOtp = async (req, res) => {
 
       await Otp.deleteOne({ phoneNumber });
 
-      const token = generateToken(user._id);
+      // console.log(user.role);
+      const token = generateToken(user._id , user.role);
 
       return res.status(200).json({
         message: "Login successful",

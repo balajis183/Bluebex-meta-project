@@ -22,6 +22,7 @@ const otpSchema = new mongoose.Schema(
     companyName: {
       type: String,
       trim: true,
+      required:true,
     },
     firebaseToken: {
       type: String,

@@ -80,6 +80,7 @@ app.get("/", (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is listening on http://15.206.226.196`);
+  console.log(`🚀 Server is listening on IP      http://15.206.226.196`); 
+  console.log(`🚀 Server is listening on Domain  https://www.bluebex.xyz`);
   connect();  //connection to datbase
 });
