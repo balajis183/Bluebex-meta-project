@@ -118,7 +118,7 @@ const addUser = async (req, res) => {
 // Get All Users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-__v");   // exclude __v
+    const users = await User.find({role:"user"}).select("-__v");   // exclude __v
     res.status(200).json({ users });
   } catch (err) {
     console.error("Error fetching users:", err.message);
@@ -127,9 +127,22 @@ const getAllUsers = async (req, res) => {
 };
 
 
+
+// Get All Admins
+const getAllAdmins = async (req, res) => {
+  try {
+    const admins = await User.find({ role: "admin" }).select("-__v"); // Filter by role: 'admin' and exclude __v
+    res.status(200).json({ admins });
+  } catch (err) {
+    console.error("Error fetching admins:", err.message);
+    res.status(500).json({ message: "Failed to fetch admins" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
-  addUser
+  addUser,
+  getAllAdmins
 };
