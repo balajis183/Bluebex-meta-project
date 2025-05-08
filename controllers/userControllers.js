@@ -6,11 +6,27 @@ const sendOtpVia2Factor = require("../utils/otpService");
 // const HASH_KEY = "YourHashKeyGoesHere";
 const HASH_KEY = process.env.HASH_KEY;
 
+const allowedAdminPhones = [
+  "9108105199",
+  "9886059754",
+  "9164949099",
+  "9148161312",
+  "9809229912",
+  "9618863286",
+  "9380386090"
+];
+
 
 //  Registration Flow
 const registerUser = async (req, res) => {
   try {
     const { phoneNumber, name , companyName, firebaseToken, appVersion  } = req.body;
+
+ //check whether the phonenumber is allowed to register as admin
+if (!allowedAdminPhones.includes(phoneNumber)) {
+  return res.status(403).json({ message: "You are not authorized to register as admin" });
+}
+
 
     const existingUser = await User.findOne({ phoneNumber });
     if (existingUser) {

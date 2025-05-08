@@ -2,6 +2,16 @@ const Otp = require("../models/otpSchema");
 const User = require("../models/userSchema");
 const generateToken = require("../utils/generateToken");
 
+const allowedAdminPhones = [
+  "9108105199",   //dev
+  "9886059754",   //jothis m'aam
+  "9164949099",   //jithin sir
+  "9148161312",   //jijo sir
+  "9809229912",   //jijo 2
+  "9618863286",  //dev 
+  "9380386090"   //dev
+];
+
 const verifyOtp = async (req, res) => {
   try {
     const { phoneNumber, otp, mode } = req.body;
@@ -16,7 +26,14 @@ const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: "OTP expired" });
     }
 
-    if (mode === "register") {
+    if (mode === "register") { 
+
+  // Check if the phone number is in the allowed admin list
+  const isAllowedAdmin = allowedAdminPhones.includes(phoneNumber);
+    if (!isAllowedAdmin) {
+    return res.status(403).json({ message: "You are not authorized to register as admin" });
+  }
+  
       // Prevent duplicate users
       const existingUser = await User.findOne({ phoneNumber });
       if (existingUser) {
@@ -38,7 +55,7 @@ const verifyOtp = async (req, res) => {
       return res
         .status(201)
         .json({
-          message: "User registered successfully",
+          message: "Admin registered successfully",
           name: newUser.name,
           phoneNumber: newUser.phoneNumber,
           companyName: newUser.companyName,
